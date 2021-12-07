@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+import Content from './Content'
 
 const courses = [
   {
@@ -129,7 +129,7 @@ return (
   </div>
 ); */
 
-  //example: todolist
+  /* //example: todolist
   const [job, setJob] = useState('')
   const [jobs, setJobs] = useState( () => {
 
@@ -165,7 +165,18 @@ return (
         )}
       </ul>
     </div>
-  );
+  ); //End todolist */
+
+  // Mounted & Unmounted
+  const [show, setShow] = useState(false)
+  return (
+    <div className="App" style={{ padding: 20 }}>
+
+      <button onClick={ () => setShow(!show) } > Toggle </button>
+      { show && <Content /> }
+
+    </div>
+  ); // END: Mounted & Unmounted
 
 
 }
