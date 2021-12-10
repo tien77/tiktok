@@ -8,7 +8,8 @@ import { useEffect, useState } from 'react'
  *      - Scroll
  *      - resize
  * 4. Cleanup
- *  - cleanup function luôn được gọi trước khi unmound componont
+ *  - cleanup function luôn được gọi trước khi unmounted componont
+ *  - cleanup function luôn được gọi trước khi callBacnk được gọi (trừ lần mounted đầu)
  */     
 
 // useEffect hook luôn được gọi khi component được Mounted
@@ -23,9 +24,10 @@ import { useEffect, useState } from 'react'
 //     - CallBack sẽ được gọi lại khi deps thay đổi, 
 //      -( Khi component re-render lại thì  useEffect() kiểm tra xem deps trước và sau có khác nhau không, nếu khác thì sẽ gọi callback)
 
-const menuTab = ['posts', 'comments', 'albums', 'photos', 'todos', 'users' ]
 
+const menuTab = ['posts', 'comments', 'albums', 'photos', 'todos', 'users' ]
 function Content(){
+    /* useEffect 
     const [menu, setMenu] = useState('posts')
     const [posts, setPosts] = useState([])
     const [showButton, setShowButton] = useState(false)
@@ -114,10 +116,58 @@ function Content(){
                 }
 
             </div>
-            
+    ) */
+    
 
+    /* đồng hồ điếm ngược setTimeout and setInterval 
+    const [time, setTime] = useState(180)
 
-    )
+    // useEffect( () => {
+    //     const timePlay = setInterval( () =>{
+    //         setTime(prev => prev - 1)
+    //     }, 1000 )
+    //     return () => clearInterval(timePlay)
+    // },[])
+
+    useEffect( () => {
+        const timePlay = setTimeout( () => {
+            setTime(prev => prev - 1)
+        }, 1000 )
+        return () => clearTimeout(timePlay)
+    },[time]) // deps time thay đổi nên useEffect() được gọi lại và setTimeout chạy lại
+
+    return (
+        <div>
+            <h1> {time} </h1>
+        </div>
+    ) */
+    
+    const [img, setImg] = useState()
+    useEffect( () => {
+        return () => {
+            img && URL.revokeObjectURL(img.preview)
+        }
+    })
+    const handleChangImage = (e) => {
+        const file = e.target.files[0]
+        //console.log( URL.createObjectURL(file) )
+        file.preview = URL.createObjectURL(file)
+        setImg(file)
+    }
+    return (
+        <div>
+            <input 
+                type="file"
+                onChange={handleChangImage}
+            />
+
+            {img && (
+                <img src={img.preview} width="90%" />
+            )}
+        </div>
+    ) 
+
+   
 }
 
 export default Content
