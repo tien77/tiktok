@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 
 // useEffect dùng trong 'Side effects'. thay đổi dữ liệu khi có tác động
 /**
@@ -142,6 +142,7 @@ function Content(){
         </div>
     ) */
     
+    /* change file image preview
     const [img, setImg] = useState()
     useEffect( () => {
         return () => {
@@ -165,7 +166,52 @@ function Content(){
                 <img src={img.preview} width="90%" />
             )}
         </div>
-    ) 
+    ) */
+    
+    /**
+     * so sánh useEffect với uselayoutEffect
+     *  #useEffect
+     *  1. cập nhật lại state
+     *  2. cập nhật DOM ( mutated )
+     *  3. Render lại UI
+     *  4. Gọi cleanup nếu deps thay đổi
+     *  5. Gọi useEffect Callback
+     * 
+     *  #uselayoutEffect
+     *  1. cập nhật lại state
+     *  2. cập nhật DOM ( mutated )
+     *  3. Gọi cleanup nếu deps thay đổi (sync) sync gọi đồng bộ chứ không bất đồng bộ như useEffect
+     *  5. Gọi uselayoutEffect Callback (sync)
+     *  5. Render lại UI
+     * 
+    */
+    const [number, setNumber] = useState(0)
+    const handleClick = () => {
+        setNumber( number + 1 )
+    }
+
+    // useLayoutEffect( () => {
+    //     if (number > 3) {
+    //        setNumber(0)
+    //     }
+    // }, [number])
+
+    useLayoutEffect( () => {
+        if (number > 3) {
+           setNumber(0)
+        }
+    }, [number])
+
+    return (
+        <div>
+            <h1>{number}</h1>
+            <button
+                onClick={handleClick}
+            >
+                Tăng số
+            </button>
+        </div>
+    )
 
    
 }
